@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Atlético Sportivo - App Oficial</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        clubBlack: '#09090b',
+                        clubDark: '#121212',
+                        clubCard: '#18181b',
+                        clubBorder: '#27272a',
+                        clubGray: '#3f3f46',
+                        clubMuted: '#71717a',
+                        clubLightGray: '#a1a1aa',
+                        clubSilver: '#e4e4e7',
+                        clubWhite: '#ffffff',
+                    },
+                    fontFamily: {
+                        title: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+            color: #f4f4f5;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .font-title {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Custom Blanquinegro vertical stripes element */
+        .stripes-pattern {
+            background: repeating-linear-gradient(
+                90deg,
+                #18181b,
+                #18181b 12px,
+                #09090b 12px,
+                #09090b 24px
+            );
+        }
+        .pulse-live-white {
+            animation: pulse-white 1.6s infinite;
+        }
+        @keyframes pulse-white {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+    </style>
+</head>
+<body class="bg-clubBlack text-zinc-100 min-h-screen pb-20 md:pb-6">
+
+    <!-- BANNER DE INSTALACIÓN PWA -->
+    <div id="pwaBanner" class="bg-zinc-100 text-zinc-900 px-4 py-2 text-xs flex justify-between items-center border-b border-zinc-300 font-medium">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-mobile-screen-button text-sm"></i>
+            <span>¡Instala la App de <strong>Sportivo</strong> en tu celular!</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="installPWA()" class="bg-zinc-900 text-white px-2.5 py-1 rounded-lg text-[11px] font-bold hover:bg-zinc-800 transition">Instalar</button>
+            <button onclick="dismissPwaBanner()" class="text-zinc-500 hover:text-zinc-900 px-1"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
+
+    <!-- HEADER SUPERIOR -->
+    <header class="bg-clubDark border-b border-clubBorder sticky top-0 z-40 shadow-xl">
+        <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+            
+            <!-- Marca / Escudo -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-full p-0.5 shadow-md flex items-center justify-center border-2 border-zinc-300">
+                    <!-- Escudo de rayas Blancas y Negras -->
+                    <svg viewBox="0 0 100 120" class="w-full h-full">
+                        <path d="M50 0 L100 20 L100 70 C100 95 50 120 50 120 C50 120 0 95 0 70 L0 20 Z" fill="#09090b" />
+                        <path d="M50 5 L95 23 L95 68 C95 90 50 113 50 113 C50 113 5 90 5 68 L5 23 Z" fill="#ffffff" />
+                        <!-- Rayas negras -->
+                        <path d="M22 25 L34 25 L34 95 L22 95 Z M44 25 L56 25 L56 95 L44 95 Z M66 25 L78 25 L78 95 L66 95 Z" fill="#09090b" />
+                        <circle cx="50" cy="55" r="15" fill="#09090b" stroke="#ffffff" stroke-width="2" />
+                        <text x="50" y="60" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="Montserrat">CAS</text>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-title font-extrabold text-base tracking-wider text-white">CLUB ATLÉTICO SPORTIVO</h1>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-zinc-400 font-bold tracking-widest uppercase">EL ALBO</span>
+                        <span class="text-[9px] bg-zinc-800 text-zinc-300 px-1.5 py-0.2 rounded border border-zinc-700">OFICIAL</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navegación Desktop Header -->
+            <nav class="hidden md:flex items-center space-x-1 text-xs font-bold">
+                <button onclick="switchTab('news')" class="desktop-nav-btn px-3 py-2 rounded-lg text-white bg-zinc-800" id="dtab-news">Noticias</button>
+                <button onclick="switchTab('disciplines')" class="desktop-nav-btn px-3 py-2 rounded-lg text-zinc-400 hover:text-white" id="dtab-disciplines">Planteles</button>
+                <button onclick="switchTab('live')" class="desktop-nav-btn px-3 py-2 rounded-lg text-zinc-400 hover:text-white" id="dtab-live">En Vivo</button>
+                <button onclick="switchTab('socios')" class="desktop-nav-btn px-3 py-2 rounded-lg text-zinc-400 hover:text-white" id="dtab-socios">Socios</button>
+                <button onclick="switchTab('club')" class="desktop-nav-btn px-3 py-2 rounded-lg text-zinc-400 hover:text-white" id="dtab-club">El Club</button>
+            </nav>
+
+            <!-- Botón Modo Dirigente / Admin -->
+            <button id="adminToggleBtn" onclick="toggleAdminMode()" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs px-3 py-1.5 rounded-full font-semibold border border-zinc-600 flex items-center gap-1.5 shadow transition">
+                <i class="fa-solid fa-user-shield text-zinc-400"></i>
+                <span id="adminBtnText">Dirigente</span>
+            </button>
+        </div>
+
+        <!-- Banner Dirigente -->
+        <div id="adminBanner" class="hidden bg-zinc-200 text-zinc-950 text-xs px-4 py-1 text-center font-bold flex justify-between items-center border-t border-zinc-400">
+            <span><i class="fa-solid fa-pen-to-square mr-1"></i> MODO DIRIGENTE ACTIVO (Edición Habilitada)</span>
+            <button onclick="toggleAdminMode()" class="underline text-[11px]">Salir</button>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="max-w-3xl mx-auto px-3 pt-4 space-y-4">
+
+        <!-- ================= TAB 1: NOTICIAS ================= -->
+        <section id="page-news" class="page-content space-y-4">
+            
+            <!-- Partido en Vivo Banner Ticker -->
+            <div id="quickMatchBanner" onclick="switchTab('live')" class="cursor-pointer stripes-pattern text-white p-4 rounded-2xl shadow-xl border border-zinc-700 flex items-center justify-between hover:border-zinc-500 transition">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-white pulse-live-white"></span>
+                        <span class="text-xs font-bold text-zinc-300 uppercase tracking-wider">EN VIVO • Fútbol 1° División</span>
+                    </div>
+                    <div class="font-title font-extrabold text-base tracking-wide">
+                        C.A. Sportivo <span class="bg-white text-zinc-950 px-2 py-0.5 rounded-md font-black mx-1" id="bannerScore">2 - 1</span> Alumni
+                    </div>
+                    <p class="text-xs text-zinc-400 mt-1" id="bannerTime"><i class="fa-regular fa-clock mr-1"></i>2° Tiempo - 34 min</p>
+                </div>
+                <div>
+                    <span class="bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-bold px-3 py-2 rounded-xl inline-flex items-center gap-1 shadow">
+                        Seguir <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Accesos Rápidos -->
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="switchTab('socios')" class="bg-clubCard border border-clubBorder hover:border-zinc-500 p-3.5 rounded-2xl text-left transition flex items-center space-x-3">
+                    <div class="bg-zinc-800 text-white p-2.5 rounded-xl text-lg border border-zinc-700">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <div>
+                        <div class="font-title font-bold text-xs text-white">Hazte Socio / Pagar</div>
+                        <p class="text-[11px] text-zinc-400">Trámites online</p>
+                    </div>
+                </button>
+                <a href="https://wa.me/5491112345678" target="_blank" class="bg-clubCard border border-clubBorder hover:border-zinc-500 p-3.5 rounded-2xl text-left transition flex items-center space-x-3">
+                    <div class="bg-zinc-800 text-white p-2.5 rounded-xl text-lg border border-zinc-700">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div>
+                        <div class="font-title font-bold text-xs text-white">Secretaría</div>
+                        <p class="text-[11px] text-zinc-400">Atención WhatsApp</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Filtro de Noticias -->
+            <div class="flex space-x-2 overflow-x-auto no-scrollbar py-1">
+                <button onclick="filterNews('todas')" class="news-filter-btn active bg-white text-zinc-950 text-xs px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap shadow">Todas</button>
+                <button onclick="filterNews('fútbol')" class="news-filter-btn bg-clubCard text-zinc-400 border border-clubBorder text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap">Fútbol</button>
+                <button onclick="filterNews('básquet')" class="news-filter-btn bg-clubCard text-zinc-400 border border-clubBorder text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap">Básquet</button>
+                <button onclick="filterNews('institucional')" class="news-filter-btn bg-clubCard text-zinc-400 border border-clubBorder text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap">Institucional</button>
+                <button onclick="filterNews('obras')" class="news-filter-btn bg-clubCard text-zinc-400 border border-clubBorder text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap">Obras</button>
+            </div>
+
+            <!-- Feed de Novedades -->
+            <div id="newsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                <!-- Inyectado por JS -->
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: PLANTELES Y DISCIPLINAS ================= -->
+        <section id="page-disciplines" class="page-content hidden space-y-4">
+            
+            <div class="bg-clubCard p-4 rounded-2xl border border-clubBorder shadow-md">
+                <h2 class="font-title font-bold text-xs text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-white"></i> Configurar Disciplina y Categoría
+                </h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Selector Disciplina -->
+                    <div>
+                        <label class="block text-[10px] font-bold text-zinc-400 mb-1 tracking-wider uppercase">DISCIPLINA</label>
+                        <select id="disciplineSelect" onchange="updateCategories()" class="w-full bg-zinc-900 text-white border border-clubBorder rounded-xl p-2.5 text-xs font-semibold focus:ring-1 focus:ring-white focus:outline-none">
+                            <option value="futbol">⚽ Fútbol Masculino</option>
+                            <option value="futbol_fem">⚽ Fútbol Femenino</option>
+                            <option value="basquet">🏀 Básquetbol</option>
+                            <option value="voley">🏐 Vóley</option>
+                            <option value="hockey">🏑 Hockey sobre Césped</option>
+                        </select>
+                    </div>
+
+                    <!-- Selector Categoría -->
+                    <div>
+                        <label class="block text-[10px] font-bold text-zinc-400 mb-1 tracking-wider uppercase">CATEGORÍA</label>
+                        <select id="categorySelect" onchange="renderSquad()" class="w-full bg-zinc-900 text-white border border-clubBorder rounded-xl p-2.5 text-xs font-semibold focus:ring-1 focus:ring-white focus:outline-none">
+                            <!-- JS cargará opciones -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-zinc-400 pt-3 mt-3 border-t border-zinc-800">
+                    <span id="squadCountText" class="font-medium text-zinc-300">Cargando...</span>
+                    <span id="squadDTText" class="font-bold text-white bg-zinc-800 px-2.5 py-1 rounded-lg border border-zinc-700">DT: -</span>
+                </div>
+            </div>
+
+            <!-- Botón Añadir Jugador (Solo Dirigente) -->
+            <div id="adminAddPlayerBox" class="hidden">
+                <button onclick="openAddPlayerModal()" class="w-full bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-extrabold py-3 px-4 rounded-xl shadow flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-user-plus"></i> Añadir Nuevo Jugador/a a esta Categoría
+                </button>
+            </div>
+
+            <!-- Grilla de Plantel -->
+            <div id="squadContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Tarjetas inyectadas por JS -->
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: MARCADOR EN VIVO ================= -->
+        <section id="page-live" class="page-content hidden space-y-4">
+            
+            <!-- Scoreboard Principal -->
+            <div class="bg-gradient-to-b from-zinc-900 via-clubCard to-zinc-950 text-white rounded-2xl p-5 shadow-2xl border border-zinc-700 relative overflow-hidden">
+                <div class="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-zinc-500 via-white to-zinc-500"></div>
+                
+                <div class="flex justify-between items-center text-xs text-zinc-400 mb-4 border-b border-zinc-800 pb-2.5">
+                    <span class="font-bold text-zinc-200 flex items-center gap-1.5">
+                        <i class="fa-solid fa-trophy text-zinc-400"></i> Liga Regional • Fecha 8
+                    </span>
+                    <span id="liveMatchState" class="bg-white text-zinc-950 px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">
+                        2° Tiempo 34'
+                    </span>
+                </div>
+
+                <!-- Enfrentamiento y Marcador -->
+                <div class="flex items-center justify-between my-2">
+                    <!-- Local -->
+                    <div class="text-center w-1/3">
+                        <div class="w-14 h-14 mx-auto bg-white rounded-full p-1 flex items-center justify-center mb-2 border-2 border-zinc-400 shadow-inner">
+                            <span class="font-title font-black text-zinc-950 text-base">CAS</span>
+                        </div>
+                        <h3 class="font-title font-bold text-xs truncate text-white">Sportivo</h3>
+                        <span class="text-[10px] text-zinc-400">Local</span>
+                    </div>
+
+                    <!-- Goles -->
+                    <div class="text-center w-1/3">
+                        <div class="text-4xl font-black font-title tracking-widest text-white">
+                            <span id="liveHomeGoals">2</span> : <span id="liveAwayGoals">1</span>
+                        </div>
+                        <span class="text-[11px] text-zinc-400 font-semibold block mt-1">Fútbol Masculino</span>
+                    </div>
+
+                    <!-- Visitante -->
+                    <div class="text-center w-1/3">
+                        <div class="w-14 h-14 mx-auto bg-zinc-800 rounded-full p-1 flex items-center justify-center mb-2 border-2 border-zinc-600">
+                            <span class="font-title font-bold text-zinc-300 text-base">CAL</span>
+                        </div>
+                        <h3 class="font-title font-bold text-xs truncate text-white">Alumni</h3>
+                        <span class="text-[10px] text-zinc-400">Visitante</span>
+                    </div>
+                </div>
+
+                <!-- Eventos / Minuto a Minuto -->
+                <div class="mt-5 pt-3 border-t border-zinc-800">
+                    <h4 class="text-xs font-bold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-stopwatch text-white"></i> Minuto a Minuto
+                    </h4>
+                    <div id="liveEventsList" class="space-y-2 text-xs max-h-52 overflow-y-auto pr-1">
+                        <!-- JS inyectará eventos -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Dirigente para Controlar Partido -->
+            <div id="adminLiveControls" class="hidden bg-clubCard p-4 rounded-2xl shadow-xl border-2 border-zinc-400 space-y-3">
+                <h3 class="font-title font-bold text-xs text-white uppercase tracking-wider flex items-center gap-1.5 border-b border-zinc-800 pb-2">
+                    <i class="fa-solid fa-sliders text-zinc-300"></i> Gestor del Partido En Vivo (Dirigente)
+                </h3>
+
+                <!-- Estado del Tiempo -->
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-zinc-400 font-bold">Estado:</span>
+                    <select id="matchTimerStatus" onchange="updateMatchStatus(this.value)" class="bg-zinc-900 text-xs text-white border border-zinc-700 rounded-lg p-1.5 flex-1 font-semibold">
+                        <option value="1° Tiempo">1° Tiempo</option>
+                        <option value="Entretiempo">Entretiempo</option>
+                        <option value="2° Tiempo 34'" selected>2° Tiempo</option>
+                        <option value="Finalizado">Finalizado</option>
+                    </select>
+                </div>
+
+                <!-- Control de Goles -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-zinc-900 p-2.5 rounded-xl border border-zinc-800 text-center">
+                        <span class="text-[10px] font-bold text-zinc-400 uppercase block mb-1.5">Sportivo</span>
+                        <div class="flex justify-center gap-2">
+                            <button onclick="adjustGoals('home', -1)" class="w-9 h-9 bg-zinc-800 text-white font-bold rounded-lg border border-zinc-700 hover:bg-zinc-700">-</button>
+                            <button onclick="adjustGoals('home', 1)" class="w-9 h-9 bg-white text-zinc-950 font-extrabold rounded-lg hover:bg-zinc-200">+</button>
+                        </div>
+                    </div>
+                    <div class="bg-zinc-900 p-2.5 rounded-xl border border-zinc-800 text-center">
+                        <span class="text-[10px] font-bold text-zinc-400 uppercase block mb-1.5">Rival</span>
+                        <div class="flex justify-center gap-2">
+                            <button onclick="adjustGoals('away', -1)" class="w-9 h-9 bg-zinc-800 text-white font-bold rounded-lg border border-zinc-700 hover:bg-zinc-700">-</button>
+                            <button onclick="adjustGoals('away', 1)" class="w-9 h-9 bg-white text-zinc-950 font-extrabold rounded-lg hover:bg-zinc-200">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cargar Incidencia -->
+                <div class="space-y-2 pt-2 border-t border-zinc-800">
+                    <label class="block text-[10px] font-bold text-zinc-400 uppercase">Publicar Minuto / Evento</label>
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <input type="text" id="eventMinute" placeholder="Min (35')" class="bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white">
+                        <select id="eventType" class="bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white">
+                            <option value="⚽ ¡GOL!">⚽ Gol</option>
+                            <option value="🟨 Amarilla">🟨 Amarilla</option>
+                            <option value="🟥 Roja">🟥 Roja</option>
+                            <option value="🔄 Cambio">🔄 Cambio</option>
+                            <option value="📣 Nota">📣 Incidencia</option>
+                        </select>
+                        <select id="eventTeam" class="bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white">
+                            <option value="Sportivo">Sportivo</option>
+                            <option value="Alumni">Alumni</option>
+                        </select>
+                    </div>
+                    <input type="text" id="eventDetail" placeholder="Detalle (Ej: Lucas Silva de tiro libre)" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white">
+                    <button onclick="addLiveEvent()" class="w-full bg-white text-zinc-950 text-xs font-black py-2.5 rounded-xl hover:bg-zinc-200 transition shadow">
+                        Añadir Evento
+                    </button>
+                </div>
+            </div>
+
+            <!-- Agenda / Fixture -->
+            <div class="bg-clubCard p-4 rounded-2xl border border-clubBorder space-y-3">
+                <h3 class="font-title font-bold text-xs text-zinc-300 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-check text-white"></i> Próximos Partidos
+                </h3>
+                
+                <div class="space-y-2 text-xs">
+                    <div class="p-3 bg-zinc-900 rounded-xl border border-zinc-800 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-bold text-zinc-400 block uppercase">BÁSQUET • Primera</span>
+                            <span class="font-bold text-white">Sportivo vs. Deportivo Central</span>
+                            <span class="text-zinc-500 block text-[10px] mt-0.5">Viernes 21:00 hs - Gimnasio Parquet</span>
+                        </div>
+                        <span class="bg-zinc-800 text-white font-bold px-2.5 py-1 rounded-lg text-[10px] border border-zinc-700">Local</span>
+                    </div>
+
+                    <div class="p-3 bg-zinc-900 rounded-xl border border-zinc-800 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-bold text-zinc-400 block uppercase">VÓLEY • Femenino</span>
+                            <span class="font-bold text-white">Atlético Rivadavia vs. Sportivo</span>
+                            <span class="text-zinc-500 block text-[10px] mt-0.5">Sábado 16:30 hs - Rivadavia</span>
+                        </div>
+                        <span class="bg-zinc-900 text-zinc-400 font-bold px-2.5 py-1 rounded-lg text-[10px] border border-zinc-800">Visitante</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 4: SOCIOS Y SECRETARÍA ================= -->
+        <section id="page-socios" class="page-content hidden space-y-4">
+            
+            <!-- Estado de Cuota / Carnet Digital Demo -->
+            <div class="bg-gradient-to-r from-zinc-900 to-clubCard p-4 rounded-2xl border border-zinc-700 shadow-lg relative overflow-hidden">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest block">Carnet Digital de Socio</span>
+                        <h3 class="font-title font-extrabold text-base text-white">Socio Activo</h3>
+                    </div>
+                    <span class="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full">
+                        <i class="fa-solid fa-circle-check mr-1"></i> Cuota al Día
+                    </span>
+                </div>
+                
+                <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 flex items-center justify-between text-xs my-2">
+                    <div>
+                        <p class="text-zinc-400 text-[10px]">Titular</p>
+                        <p class="font-bold text-white">Juan Pérez</p>
+                        <p class="text-zinc-500 text-[10px] mt-0.5">Socio N° 4820</p>
+                    </div>
+                    <div class="w-12 h-12 bg-white p-1 rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-qrcode text-zinc-950 text-3xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trámites Online -->
+            <div class="bg-clubCard p-4 rounded-2xl border border-clubBorder space-y-3">
+                <h3 class="font-title font-bold text-xs text-zinc-300 uppercase tracking-wider">Gestiones y Adhesión</h3>
+                
+                <form onsubmit="handleSocioSubmit(event)" class="space-y-3 text-xs">
+                    <div>
+                        <label class="block text-zinc-400 font-semibold mb-1">Nombre Completo</label>
+                        <input type="text" required placeholder="Ej: Marcelo Gallardo" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-2.5 text-white">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-zinc-400 font-semibold mb-1">DNI</label>
+                            <input type="number" required placeholder="Sin puntos" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-2.5 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-zinc-400 font-semibold mb-1">Categoría</label>
+                            <select class="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-2.5 text-white">
+                                <option>Socio Activo</option>
+                                <option>Socio Cadete</option>
+                                <option>Grupo Familiar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-zinc-400 font-semibold mb-1">WhatsApp de contacto</label>
+                        <input type="tel" required placeholder="Ej: 1112345678" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-2.5 text-white">
+                    </div>
+                    <button type="submit" class="w-full bg-white text-zinc-950 font-black py-3 rounded-xl hover:bg-zinc-200 transition shadow">
+                        Asociarme Online / Consultar Cuota
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= TAB 5: EL CLUB ================= -->
+        <section id="page-club" class="page-content hidden space-y-4">
+            
+            <div class="bg-clubCard rounded-2xl border border-clubBorder overflow-hidden">
+                <div class="stripes-pattern h-28 flex items-center justify-center text-white p-4 text-center border-b border-zinc-800">
+                    <div>
+                        <h2 class="font-title font-black text-xl tracking-wider text-white drop-shadow">C. A. SPORTIVO</h2>
+                        <p class="text-xs text-zinc-300 font-bold">Fundado el 12 de Mayo de 1928</p>
+                    </div>
+                </div>
+                <div class="p-4 text-xs text-zinc-300 space-y-2 leading-relaxed">
+                    <p>
+                        Casi un siglo vistiendo los colores Blanco y Negro con orgullo. Una institución dedicada a la formación deportiva, la contención social y los valores de comunidad.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-clubCard p-4 rounded-2xl border border-clubBorder space-y-3 text-xs">
+                <h3 class="font-title font-bold text-zinc-300 uppercase tracking-wider">Instalaciones</h3>
+                <div class="space-y-2">
+                    <div class="flex items-start gap-2.5 text-zinc-300">
+                        <i class="fa-solid fa-building text-white mt-1"></i>
+                        <div>
+                            <strong class="text-white block">Sede Central y Gimnasio Parquet</strong>
+                            <span>Av. San Martín 1420 - Tel: 422-1100</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2.5 text-zinc-300">
+                        <i class="fa-solid fa-futbol text-white mt-1"></i>
+                        <div>
+                            <strong class="text-white block">Predio Deportivo "El Campo"</strong>
+                            <span>Calle Belgrano y Ruta 3 - Canchas de Fútbol y Hockey</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Redes Sociales -->
+            <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+                <a href="https://instagram.com" target="_blank" class="p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white flex items-center gap-2 hover:bg-zinc-800">
+                    <i class="fa-brands fa-instagram text-base"></i> Instagram
+                </a>
+                <a href="https://facebook.com" target="_blank" class="p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white flex items-center gap-2 hover:bg-zinc-800">
+                    <i class="fa-brands fa-facebook text-base"></i> Facebook
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- NAVEGACIÓN BOTTOM (MÓVIL) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-800 shadow-2xl z-50">
+        <div class="flex justify-around items-center text-center">
+            
+            <button onclick="switchTab('news')" id="tab-news" class="nav-tab-btn flex-1 py-2.5 text-white font-bold flex flex-col items-center">
+                <i class="fa-solid fa-newspaper text-base mb-0.5"></i>
+                <span class="text-[10px]">Noticias</span>
+            </button>
+
+            <button onclick="switchTab('disciplines')" id="tab-disciplines" class="nav-tab-btn flex-1 py-2.5 text-zinc-500 font-medium flex flex-col items-center">
+                <i class="fa-solid fa-shirt text-base mb-0.5"></i>
+                <span class="text-[10px]">Planteles</span>
+            </button>
+
+            <button onclick="switchTab('live')" id="tab-live" class="nav-tab-btn flex-1 py-2.5 text-zinc-500 font-medium flex flex-col items-center relative">
+                <span class="absolute top-2 right-6 w-2 h-2 rounded-full bg-white pulse-live-white"></span>
+                <i class="fa-solid fa-satellite-dish text-base mb-0.5"></i>
+                <span class="text-[10px]">En Vivo</span>
+            </button>
+
+            <button onclick="switchTab('socios')" id="tab-socios" class="nav-tab-btn flex-1 py-2.5 text-zinc-500 font-medium flex flex-col items-center">
+                <i class="fa-solid fa-id-card text-base mb-0.5"></i>
+                <span class="text-[10px]">Socios</span>
+            </button>
+
+            <button onclick="switchTab('club')" id="tab-club" class="nav-tab-btn flex-1 py-2.5 text-zinc-500 font-medium flex flex-col items-center">
+                <i class="fa-solid fa-shield-halved text-base mb-0.5"></i>
+                <span class="text-[10px]">El Club</span>
+            </button>
+
+        </div>
+    </nav>
+
+    <!-- MODAL AÑADIR JUGADOR (ADMIN) -->
+    <div id="addPlayerModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-clubCard border border-zinc-700 rounded-2xl max-w-sm w-full p-5 space-y-4 relative">
+            <button onclick="closeAddPlayerModal()" class="absolute top-3 right-3 text-zinc-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="font-title font-bold text-sm text-white uppercase border-b border-zinc-800 pb-2">
+                <i class="fa-solid fa-user-plus mr-1"></i> Cargar Nuevo Jugador/a
+            </h3>
+            <form onsubmit="handleAddPlayerSubmit(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold mb-1 text-zinc-400">Nombre Completo</label>
+                    <input id="newPlayerName" type="text" required class="w-full border border-zinc-700 rounded-xl p-2.5 bg-zinc-900 text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-semibold mb-1 text-zinc-400">Posición</label>
+                        <input id="newPlayerPos" type="text" placeholder="Ej: Delantero" required class="w-full border border-zinc-700 rounded-xl p-2.5 bg-zinc-900 text-white">
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1 text-zinc-400">N° Camiseta</label>
+                        <input id="newPlayerNumber" type="number" placeholder="Ej: 10" class="w-full border border-zinc-700 rounded-xl p-2.5 bg-zinc-900 text-white">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-white text-zinc-950 font-black py-3 rounded-xl hover:bg-zinc-200 transition">
+                    Guardar Jugador
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let isAdminMode = false;
+
+        const newsData = [
+            {
+                id: 1,
+                tag: 'fútbol',
+                title: '¡Victoria trabajada del Albo en el clásico!',
+                date: 'Hace 2 horas',
+                desc: 'Sportivo superó 2 a 1 a Alumni en un partido electrizante. Goles de Mateo Gómez y Lucas Silva.',
+                img: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80'
+            },
+            {
+                id: 2,
+                tag: 'básquet',
+                title: 'Comienza la segunda ronda en el Gimnasio Parquet',
+                date: 'Ayer',
+                desc: 'Recibimos a Deportivo Central este viernes. Las entradas ya están disponibles en secretaría.',
+                img: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=600&q=80'
+            },
+            {
+                id: 3,
+                tag: 'obras',
+                title: 'Nuevos vestuarios en el Predio Deportivo',
+                date: '25 Oct',
+                desc: 'Avanza la obra de remodelación de sanitarios y vestuarios para todas las divisiones inferiores.',
+                img: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=600&q=80'
+            }
+        ];
+
+        const squadDatabase = {
+            futbol: {
+                categories: {
+                    'primera': {
+                        dt: 'Gustavo Benítez',
+                        players: [
+                            { number: 1, name: 'Facundo Rossi', pos: 'Arquero', age: 26 },
+                            { number: 2, name: 'Matías Villalba', pos: 'Defensor Central', age: 28 },
+                            { number: 5, name: 'Santiago Martínez', pos: 'Volante Central', age: 25 },
+                            { number: 10, name: 'Lucas Silva', pos: 'Enganche / Capitán', age: 29 },
+                            { number: 9, name: 'Joaquín Pereyra', pos: 'Delantero Centro', age: 23 }
+                        ]
+                    },
+                    'reserva': {
+                        dt: 'Carlos Juárez',
+                        players: [
+                            { number: 1, name: 'Bautista Ledesma', pos: 'Arquero', age: 19 },
+                            { number: 9, name: 'Benjamin Sosa', pos: 'Delantero', age: 18 }
+                        ]
+                    },
+                    'sub19': { dt: 'Ezequiel Paz', players: [{ number: 10, name: 'Tomi Ruiz', pos: 'Volante', age: 17 }] },
+                    'sub17': { dt: 'Mariano Aguilar', players: [{ number: 7, name: 'Santi Giménez', pos: 'Delantero', age: 16 }] },
+                    'infantil': { dt: 'Coordinación Infantil', players: [{ number: 8, name: 'Mati Roldán', pos: 'Mediocampista', age: 11 }] }
+                }
+            },
+            futbol_fem: {
+                categories: {
+                    'primera': {
+                        dt: 'Valeria Soria',
+                        players: [
+                            { number: 1, name: 'Lucía Morales', pos: 'Arquera', age: 24 },
+                            { number: 10, name: 'Sofía Rodríguez', pos: 'Delantera', age: 22 }
+                        ]
+                    }
+                }
+            },
+            basquet: {
+                categories: {
+                    'primera': {
+                        dt: 'Franco Scaramuzza',
+                        players: [
+                            { number: 4, name: 'Ezequiel Paz', pos: 'Base', age: 27 },
+                            { number: 15, name: 'Bruno Giannini', pos: 'Pívot', age: 30 }
+                        ]
+                    }
+                }
+            },
+            voley: { categories: { 'primera': { dt: 'Laura Fernández', players: [{ number: 2, name: 'Caro Blanco', pos: 'Armadora', age: 21 }] } } },
+            hockey: { categories: { 'primera': { dt: 'Esteban Busto', players: [{ number: 10, name: 'Delfina Maidana', pos: 'Delantera', age: 22 }] } } }
+        };
+
+        const liveEvents = [
+            { min: "34'", team: "Sportivo", type: "⚽ ¡GOL!", detail: "Lucas Silva de cabeza tras córner" },
+            { min: "18'", team: "Alumni", type: "🟨 Amarilla", detail: "Falta táctica en el medio" },
+            { min: "05'", team: "Sportivo", type: "⚽ ¡GOL!", detail: "Mateo Gómez remate rasante" }
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderNews('todas');
+            updateCategories();
+            renderLiveEvents();
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`page-${tabId}`).classList.remove('hidden');
+
+            // Mobile Nav UI
+            document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+                btn.classList.remove('text-white', 'font-bold');
+                btn.classList.add('text-zinc-500', 'font-medium');
+            });
+            const activeMobileBtn = document.getElementById(`tab-${tabId}`);
+            if(activeMobileBtn) {
+                activeMobileBtn.classList.remove('text-zinc-500', 'font-medium');
+                activeMobileBtn.classList.add('text-white', 'font-bold');
+            }
+
+            // Desktop Nav UI
+            document.querySelectorAll('.desktop-nav-btn').forEach(btn => {
+                btn.classList.remove('bg-zinc-800', 'text-white');
+                btn.classList.add('text-zinc-400');
+            });
+            const activeDesktopBtn = document.getElementById(`dtab-${tabId}`);
+            if(activeDesktopBtn) {
+                activeDesktopBtn.classList.remove('text-zinc-400');
+                activeDesktopBtn.classList.add('bg-zinc-800', 'text-white');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleAdminMode() {
+            isAdminMode = !isAdminMode;
+            const banner = document.getElementById('adminBanner');
+            const btnText = document.getElementById('adminBtnText');
+            const liveControls = document.getElementById('adminLiveControls');
+            const addPlayerBox = document.getElementById('adminAddPlayerBox');
+
+            if (isAdminMode) {
+                banner.classList.remove('hidden');
+                btnText.textContent = 'Modo Socio';
+                liveControls.classList.remove('hidden');
+                addPlayerBox.classList.remove('hidden');
+            } else {
+                banner.classList.add('hidden');
+                btnText.textContent = 'Dirigente';
+                liveControls.classList.add('hidden');
+                addPlayerBox.classList.add('hidden');
+            }
+            renderSquad();
+        }
+
+        function renderNews(filter) {
+            const container = document.getElementById('newsContainer');
+            container.innerHTML = '';
+
+            const filtered = filter === 'todas' ? newsData : newsData.filter(i => i.tag === filter);
+
+            filtered.forEach(news => {
+                const card = document.createElement('div');
+                card.className = "bg-clubCard rounded-2xl border border-clubBorder overflow-hidden shadow-sm";
+                card.innerHTML = `
+                    <img src="${news.img}" alt="${news.title}" class="w-full h-36 object-cover">
+                    <div class="p-3.5">
+                        <div class="flex justify-between items-center text-[10px] text-zinc-400 mb-1">
+                            <span class="uppercase font-bold text-zinc-950 bg-white px-2 py-0.5 rounded">${news.tag}</span>
+                            <span>${news.date}</span>
+                        </div>
+                        <h3 class="font-title font-bold text-sm text-white leading-snug mb-1">${news.title}</h3>
+                        <p class="text-xs text-zinc-400 line-clamp-2">${news.desc}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterNews(filterTag) {
+            document.querySelectorAll('.news-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-zinc-950', 'shadow');
+                btn.classList.add('bg-clubCard', 'text-zinc-400');
+            });
+            event.target.classList.remove('bg-clubCard', 'text-zinc-400');
+            event.target.classList.add('bg-white', 'text-zinc-950', 'shadow');
+            renderNews(filterTag);
+        }
+
+        function updateCategories() {
+            const discSelect = document.getElementById('disciplineSelect').value;
+            const catSelect = document.getElementById('categorySelect');
+            catSelect.innerHTML = '';
+
+            const categories = squadDatabase[discSelect]?.categories || {};
+            const categoryNames = {
+                'primera': 'Primera División',
+                'reserva': 'Reserva',
+                'sub19': 'Sub-19 (Juveniles)',
+                'sub17': 'Sub-17',
+                'infantil': 'Infantiles'
+            };
+
+            Object.keys(categories).forEach(catKey => {
+                const opt = document.createElement('option');
+                opt.value = catKey;
+                opt.textContent = categoryNames[catKey] || catKey.toUpperCase();
+                catSelect.appendChild(opt);
+            });
+
+            renderSquad();
+        }
+
+        function renderSquad() {
+            const disc = document.getElementById('disciplineSelect').value;
+            const cat = document.getElementById('categorySelect').value;
+            const squadContainer = document.getElementById('squadContainer');
+            
+            const currentSquad = squadDatabase[disc]?.categories[cat];
+            
+            if (!currentSquad || !currentSquad.players) {
+                squadContainer.innerHTML = `<div class="bg-clubCard p-4 rounded-xl text-center text-xs text-zinc-500 col-span-2">Sin datos de esta categoría.</div>`;
+                document.getElementById('squadCountText').textContent = '0 registrados';
+                document.getElementById('squadDTText').textContent = 'DT: Sin asignar';
+                return;
+            }
+
+            document.getElementById('squadCountText').textContent = `${currentSquad.players.length} integrantes en plantel`;
+            document.getElementById('squadDTText').textContent = `DT: ${currentSquad.dt}`;
+
+            squadContainer.innerHTML = '';
+
+            currentSquad.players.forEach((player, index) => {
+                const pCard = document.createElement('div');
+                pCard.className = "bg-clubCard p-3.5 rounded-2xl border border-clubBorder flex items-center justify-between";
+                pCard.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-700 text-white font-title font-bold flex items-center justify-center text-xs">
+                            ${player.number ? '#' + player.number : '<i class="fa-solid fa-user"></i>'}
+                        </div>
+                        <div>
+                            <h4 class="font-title font-bold text-xs text-white">${player.name}</h4>
+                            <span class="text-[10px] text-zinc-400 block">${player.pos} ${player.age ? '• ' + player.age + ' años' : ''}</span>
+                        </div>
+                    </div>
+                    ${isAdminMode ? `<button onclick="deletePlayer(${index})" class="text-zinc-500 hover:text-white text-xs px-2"><i class="fa-solid fa-trash"></i></button>` : ''}
+                `;
+                squadContainer.appendChild(pCard);
+            });
+        }
+
+        function handleSocioSubmit(e) {
+            e.preventDefault();
+            alert('¡Solicitud registrada con éxito! La Secretaría del Club Atlético Sportivo se contactará a la brevedad por WhatsApp.');
+        }
+
+        function openAddPlayerModal() { document.getElementById('addPlayerModal').classList.remove('hidden'); }
+        function closeAddPlayerModal() { document.getElementById('addPlayerModal').classList.add('hidden'); }
+        
+        function handleAddPlayerSubmit(e) {
+            e.preventDefault();
+            const disc = document.getElementById('disciplineSelect').value;
+            const cat = document.getElementById('categorySelect').value;
+
+            squadDatabase[disc].categories[cat].players.push({
+                name: document.getElementById('newPlayerName').value,
+                pos: document.getElementById('newPlayerPos').value,
+                number: document.getElementById('newPlayerNumber').value || null
+            });
+
+            renderSquad();
+            closeAddPlayerModal();
+            document.getElementById('newPlayerName').value = '';
+        }
+
+        function deletePlayer(index) {
+            const disc = document.getElementById('disciplineSelect').value;
+            const cat = document.getElementById('categorySelect').value;
+            squadDatabase[disc].categories[cat].players.splice(index, 1);
+            renderSquad();
+        }
+
+        let homeGoals = 2;
+        let awayGoals = 1;
+
+        function adjustGoals(team, delta) {
+            if (team === 'home') {
+                homeGoals = Math.max(0, homeGoals + delta);
+                document.getElementById('liveHomeGoals').textContent = homeGoals;
+            } else {
+                awayGoals = Math.max(0, awayGoals + delta);
+                document.getElementById('liveAwayGoals').textContent = awayGoals;
+            }
+            document.getElementById('bannerScore').textContent = `${homeGoals} - ${awayGoals}`;
+        }
+
+        function updateMatchStatus(val) {
+            document.getElementById('liveMatchState').textContent = val;
+            document.getElementById('bannerTime').innerHTML = `<i class="fa-regular fa-clock mr-1"></i>${val}`;
+        }
+
+        function addLiveEvent() {
+            const min = document.getElementById('eventMinute').value || "40'";
+            const type = document.getElementById('eventType').value;
+            const team = document.getElementById('eventTeam').value;
+            const detail = document.getElementById('eventDetail').value || "Incidencia registrada";
+
+            liveEvents.unshift({ min, team, type, detail });
+            renderLiveEvents();
+            document.getElementById('eventMinute').value = '';
+            document.getElementById('eventDetail').value = '';
+        }
+
+        function renderLiveEvents() {
+            const list = document.getElementById('liveEventsList');
+            list.innerHTML = '';
+
+            liveEvents.forEach(evt => {
+                const item = document.createElement('div');
+                item.className = "flex items-start gap-2 bg-zinc-900 p-2 rounded-xl border border-zinc-800 text-xs";
+                item.innerHTML = `
+                    <span class="font-bold text-white font-mono text-[11px]">${evt.min}</span>
+                    <div>
+                        <span class="font-bold text-zinc-200">${evt.team}</span> - 
+                        <span class="text-zinc-400 font-medium">${evt.type}</span>
+                        <p class="text-zinc-500 text-[10px] mt-0.5">${evt.detail}</p>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function dismissPwaBanner() {
+            document.getElementById('pwaBanner').style.display = 'none';
+        }
+
+        function installPWA() {
+            alert('Para instalar la App: Haz clic en "Añadir a la pantalla de inicio" o "Instalar" desde el menú de opciones de tu navegador.');
+            dismissPwaBanner();
+        }
+    </script>
+</body>
+</html>
